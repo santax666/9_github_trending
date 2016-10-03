@@ -19,8 +19,8 @@ def get_request(url, req_type):
     else:
         query_param = None
         query_url = url.replace('{/number}', '')
-    r = requests.get(query_url, params=query_param)
-    return r.text
+    repos = requests.get(query_url, params=query_param)
+    return repos.text
 
 
 def json_data_parse(json_str, req_type):
