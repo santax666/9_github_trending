@@ -3,15 +3,15 @@ import datetime
 import json
 
 
-def get_date_ago():
-    number_days_ago = 7
+def get_date_one_week_ago():
+    days_in_week = 7
     now_date = datetime.date.today()
-    days_ago = datetime.timedelta(days=number_days_ago)
-    date_ago = now_date - days_ago
+    count_days_ago = datetime.timedelta(days=days_in_week)
+    date_ago = now_date - count_days_ago
     return date_ago.strftime("%Y-%m-%d")
 
 
-def get_content_of_response(url, param):
+def send_get_request(url, param):
     response = requests.get(url, params=query_param)
     return response.json()
 
@@ -35,8 +35,8 @@ def get_trending_repositories(json_data):
 def get_open_issues_amount(issues_url):
     open_issues = []
     url = issues_url.replace('{/number}', '')
-    issues_data = get_content_of_response(url, None)
-    for issue in issues_data:
+    issues_content = send_get_request(url, None)
+    for issue in issues_content:
         html_url = issue['html_url']
         state = issue['state']
         if ("/issues/" in html_url) and (state == 'open'):
@@ -59,9 +59,9 @@ def output_trending_repos(trending_repos):
 
 if __name__ == '__main__':
     query_param = {'order': 'desc', 'sort': 'stars',
-                   'q': 'created:>' + get_date_ago()}
+                   'q': 'created:>' + get_date_one_week_ago()}
     query_url = 'https://api.github.com/search/repositories'
 
-    all_repos = get_content_of_response(query_url, query_param)
-    trending_repos = get_trending_repositories(all_repos)
+    repos_json_content = send_get_request(query_url, query_param)
+    trending_repos = get_trending_repositories(repos_json_content)
     output_trending_repos(trending_repos)
