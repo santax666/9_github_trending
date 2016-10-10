@@ -11,13 +11,6 @@ def get_date_one_week_ago():
     return date_ago.strftime("%Y-%m-%d")
 
 
-""" --- send_get_request(url, param) ---
-Функция вызывается 2 раза, поэтому разные url и param переносить внутрь функции
-нежелательно. Если скрипт будет импортирован в другой проект, то есть большая
-вероятность, что эта функция будет использована - url и param в ней будут лишни
-    --- send_get_request(url, param) --- """
-
-
 def send_get_request(url, param):
     response = requests.get(url, params=query_param)
     return response.json()
